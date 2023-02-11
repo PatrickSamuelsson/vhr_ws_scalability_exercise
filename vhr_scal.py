@@ -11,7 +11,6 @@ import argparse
 
 def find_files(path,check_file=True):
   result = []
-#  print ("Search in:",path)
   with os.scandir(path) as it:
     for entry in it:
       if check_file:
@@ -43,7 +42,6 @@ def write_namelist(filename,list):
 
 def update_namelist(list,new_settings):
 
-
   search = False
   update = []
   nfld=0
@@ -60,7 +58,7 @@ def update_namelist(list,new_settings):
         nfld=0
         nchg=0
       
-      key = l[1:].strip()
+      key = l.replace('&','').strip()
       search = key in new_settings
       if search :
         nfld= len(new_settings[key])
@@ -75,6 +73,7 @@ def update_namelist(list,new_settings):
         if v > -1:
           n[1]=str(v)+',\n'
           update[-1] = '='.join(n)
+          print(update[-1])
         else:
           new_settings[key][k]=int(n[1].replace(',','').strip())
 
@@ -105,7 +104,7 @@ def update_settings(s):
  return new_settings
 
 def skipme(d):
-      return re.match(r'(fort.4|ICMSH(.*)+\d{4}|io_serv(.*))',d)
+      return re.match(r'((core|log|PF|drhook|io_serv)(.*)|MASTERODB|fort.4|ICMSH(.*)+\d{4})',d)
 
 def setup_files(indir,files,links):
 
@@ -125,7 +124,7 @@ def create_job(wrkdir,i,ns,val,binary,environment):
 
   logfile = os.path.join(wrkdir,'job.log')
   tpn=val['TASK-PER-NODE'] if 'TASK-PER-NODE' in val else 128
-  nodes = int((ns['NAMPAR0']['NPROC']+ns['NAMIO_SERV']['NPROC_IO'])/tpn)
+  nodes = int((ns['NAMPAR0']['NPROC']+max(0,ns['NAMIO_SERV']['NPROC_IO']))/tpn)
   ompt = 'export OMP_NUM_THREADS={}'.format(val['OMP_NUM_THREADS']) if 'OMP_NUM_THREADS' in val else 1
 
 
@@ -160,7 +159,7 @@ srun {4}
   f.write(line)
   f.close()
 
-  os.system('sbatch {}'.format(jobfile))
+  #os.system('sbatch {}'.format(jobfile))
 
 
 def main(argv) :
@@ -183,9 +182,9 @@ def main(argv) :
   environment = config['environment'][config['use_environment']]
 
 
-
   indir=config['indir']
-  vhrdir='{}/vhr_exercise'.format(os.environ['SCRATCH'])
+  if 'vhrdir' not in config:
+    config['vhrdir']='{}/vhr_exercise'.format(os.environ['SCRATCH'])
   binary=config['binary']
 
   print("Reference setup:",indir)
@@ -199,15 +198,15 @@ def main(argv) :
 
   namelist = read_namelist(os.path.join(indir,'fort.4'))
 
-  if not os.path.exists(vhrdir):
-      os.makedirs(vhrdir)
+  if not os.path.exists(config['vhrdir']):
+      os.makedirs(config['vhrdir'])
 
   for tag,val in settings.items():
     if 'active' in val:
         if not val['active']:
             continue
-    os.chdir(vhrdir)
-    wrkdir=os.path.join(vhrdir,'test_{}'.format(tag))
+    os.chdir(config['vhrdir'])
+    wrkdir=os.path.join(config['vhrdir'],'test_{}'.format(tag))
     if not os.path.exists(wrkdir):
         os.makedirs(wrkdir)
 
