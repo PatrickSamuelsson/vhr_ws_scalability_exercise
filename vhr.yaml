@@ -53,3 +53,35 @@ environment:
    module load netcdf4/4.7.4
    module load hdf5/1.10.6
    module load ecmwf-toolbox/2021.08.3.0
+
+ intel_belgium: | 
+   module purge
+   module load prgenv/intel
+   module load intel/2021.4.0
+   module load intel-mkl/19.0.5
+   module load hpcx-openmpi/2.9.0
+   module load ecmwf-toolbox/2022.03.0.1
+   module load hdf5/1.10.6
+   module load netcdf4/4.7.4
+   export LD_LIBRARY_PATH=${ECCODES_DIR}/lib:${NETCDF4_DIR}/lib:${LD_LIBRARY_PATH}
+   export OMP_PLACES=cores
+   export OMP_PROC_BIND=true
+   export OMP_STACKSIZE=4G
+   export KMP_STACKSIZE=4G
+   export KMP_MONITOR_STACKSIZE=4G
+   export MKL_CBWR="AUTO,STRICT"
+   export MKL_NUM_THREADS=1
+   export MKL_DEBUG_CPU_TYPE=5
+   export I_MPI_LIBRARY_KIND=release
+   export DR_HOOK=1
+   export DR_HOOK_IGNORE_SIGNALS=-1
+   export DR_HOOK_SILENT=1
+   export DR_HOOK_SHOW_PROCESS_OPTIONS=0
+   export DR_HOOK_OPT=prof
+   export MPL_MBX_SIZE=2048000000
+   export EC_PROFILE_HEAP=0
+   export MPIAUTOCONFIG=mpiauto.TIME.conf
+   export EC_PROFILE_MEM=0
+   export EC_MPI_ATEXIT=0
+   export EC_MEMINFO=0
+   export ZOPT=""

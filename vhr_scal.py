@@ -52,7 +52,7 @@ def update_namelist(list,new_settings):
     if '&' in l:
       if nfld != nchg:
         for k,v in new_settings[key].items():
-         if k not in done:
+         if k not in done and v > -1:
           update.insert(-2,'  {}={},\n'.format(k,v))
         done=[]
         nfld=0
@@ -73,7 +73,6 @@ def update_namelist(list,new_settings):
         if v > -1:
           n[1]=str(v)+',\n'
           update[-1] = '='.join(n)
-          print(update[-1])
         else:
           new_settings[key][k]=int(n[1].replace(',','').strip())
 
@@ -130,7 +129,7 @@ def create_job(wrkdir,i,ns,val,binary,environment):
 
   line = '''#!/bin/bash
 #SBATCH --qos=np
-#SBATCH --time=1:00:00
+#SBATCH --time=2:00:00
 #SBATCH --error={0}
 #SBATCH --output={0}
 #SBATCH --job-name=vhr:{1}
@@ -159,12 +158,12 @@ srun {4}
   f.write(line)
   f.close()
 
-  #os.system('sbatch {}'.format(jobfile))
+  os.system('sbatch {}'.format(jobfile))
 
 
 def main(argv) :
 
-  parser = argparse.ArgumentParser(description='Fetch ARPEGE data from Meteo France over ftp')
+  parser = argparse.ArgumentParser(description='Wrapper for VHR scalability exercise')
   parser.add_argument('-c',dest="config_file",help='Config file',required=True,default='vhr.yaml')
 
   if len(argv) == 1 :

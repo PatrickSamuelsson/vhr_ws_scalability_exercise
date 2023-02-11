@@ -11,13 +11,13 @@ def scan_log(filename):
  n = {}
  with open(filename, "r") as a_file:
   for line in a_file:
-    if re.match(r'(.*?)(CSTOP)=\"h(\d{1,})\",',line):
-     zz = re.findall(r'(CSTOP)=\"h(\d{1,})\",',line)
-     n[zz[0][0]]=int(zz[0][1])
-     continue
     if re.match(r'(.*?)(ElapsedRaw)(.*)\: (\d{1,})',line):
      zz = re.findall(r'(ElapsedRaw)(.*)\: (\d{1,})',line)
      n[zz[0][0]]=int(zz[0][-1])
+     continue
+    if re.match(r'(.*)(NSTOP)(.*)=(( ){0,})(\d{1,})',line):
+     zz = re.findall(r'(.*)(|NSTOP)(.*) =(( ){0,})(\d{1,})',line)
+     n[zz[0][0].strip()]=int(zz[0][-1])
      continue
     if re.match(r'(.*)(NFLEVG|NSTRIN|NPROMA|NPRGPNS|NPRGPEW|NDLON|NDGUXG) =(( ){0,})(\d{1,})',line):
      zz = re.findall(r'(.*)(NFLEVG|NSTRIN|NPROMA|NPRGPNS|NPRGPEW|NDLON|NDGUXG) =(( ){0,})(\d{1,})',line)
@@ -49,7 +49,8 @@ def plot_log(scans):
   x,y = [],[]
   if 'ElapsedRaw' in v:
     x.append(v['NODES'])
-    y.append(v['ElapsedRaw']/v['CSTOP'])
+    nhour = float(v['NSTOP']*v['TSTEP'])/3600.
+    y.append(v['ElapsedRaw']/nhour)
 
   xx,yy = [],[]
   for i in np.argsort(x):
@@ -87,7 +88,7 @@ def scan_logs(path):
 
 def main(argv) :
 
-  parser = argparse.ArgumentParser(description='Fetch ARPEGE data from Meteo France over ftp')
+  parser = argparse.ArgumentParser(description='Plot cost as function of NODES')
   parser.add_argument('-e',dest="experiments",help='List of experiments as exp1:exp2:...:expN',required=True,default=None)
   parser.add_argument('-i',dest="vhrdir",help='List of experiments',required=False,default=os.path.join(os.environ['SCRATCH'],'vhr_exercise'))
 
