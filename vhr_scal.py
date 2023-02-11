@@ -43,6 +43,7 @@ def write_namelist(filename,list):
 
 def update_namelist(list,new_settings):
 
+
   search = False
   update = []
   nfld=0
@@ -71,25 +72,35 @@ def update_namelist(list,new_settings):
       if k in l:
         done.append(k)
         n= l.split('=')
-        n[1]=str(v)+',\n'
-        update[-1] = '='.join(n)
+        if v > -1:
+          n[1]=str(v)+',\n'
+          update[-1] = '='.join(n)
+        else:
+          new_settings[key][k]=int(n[1].replace(',','').strip())
 
   return update
 
 def update_settings(s):
 
- new_settings= { 'NAMPAR0': { 'NPROC': s['NPROC'] , 
-                              'NPRGPEW': s['NPROCX'],
-                              'NPRGPNS': s['NPROCY'],
-                              'NPRTRV' : s['NPROCX'],
-                              'NPRTRW' : s['NPROCY'],
-                            },
-                 'NAMIO_SERV': { 'NPROC_IO' : s['NPROC_IO'] },
-               }
+ new_settings= { 'NAMPAR0' : {},
+                 'NAMPAR1' : {},
+                 'NAMIO_SERV': {} }
 
- new_settings['NAMPAR1'] = {}
- new_settings['NAMPAR1']['NSTRIN'] = s['NSTRIN']  if 'NSTRIN' in s else 1
- new_settings['NAMPAR1']['NSTROUT'] = s['NSTRIN'] if 'NSTRIN' in s else 1
+ if 'NPROC' in s :
+     new_settings['NAMPAR0']['NPROC'] = s['NPROC']
+
+ if 'NPROCX' in s and 'NPROCY' in s:
+     new_settings['NAMPAR0']['NPRGPEW']= s['NPROCX']
+     new_settings['NAMPAR0']['NPRTRV']= s['NPROCX']
+     new_settings['NAMPAR0']['NPRGPNS']= s['NPROCY']
+     new_settings['NAMPAR0']['NPRTRW']= s['NPROCY']
+               
+ if 'NPROC_IO' in s :
+     new_settings['NAMIO_SERV']['NPROC_IO']= s['NPROC_IO']
+
+ if 'NSTRIN' in s :
+     new_settings['NAMPAR1']['NSTRIN'] = s['NSTRIN']
+     new_settings['NAMPAR1']['NSTROUT'] = s['NSTRIN']
 
  return new_settings
 
@@ -108,15 +119,14 @@ def setup_files(indir,files,links):
         shutil.copy(os.path.join(indir,fname),'.')
 
 
-def create_job(wrkdir,i,val,binary,environment):
-
+def create_job(wrkdir,i,ns,val,binary,environment):
 
   jobfile = 'test.job'
 
   logfile = os.path.join(wrkdir,'job.log')
   tpn=val['TASK-PER-NODE'] if 'TASK-PER-NODE' in val else 128
-  nodes = int((val['NPROC']+val['NPROC_IO'])/tpn)
-  ompt = 'export OMP_NUM_THREADS={}'.format(val['OMP_NUM_THREADS'])
+  nodes = int((ns['NAMPAR0']['NPROC']+ns['NAMIO_SERV']['NPROC_IO'])/tpn)
+  ompt = 'export OMP_NUM_THREADS={}'.format(val['OMP_NUM_THREADS']) if 'OMP_NUM_THREADS' in val else 1
 
 
   line = '''#!/bin/bash
@@ -124,7 +134,7 @@ def create_job(wrkdir,i,val,binary,environment):
 #SBATCH --time=1:00:00
 #SBATCH --error={0}
 #SBATCH --output={0}
-#SBATCH --job-name=vhr:run_{1}
+#SBATCH --job-name=vhr:{1}
 #SBATCH --nodes={2}
 #SBATCH --ntasks-per-node={3}
 #SBATCH --cpus-per-task=1
@@ -141,13 +151,16 @@ srun {4}
 '''.format(logfile,i,nodes,tpn,binary,wrkdir,environment,ompt)
 
   print("Creating job as",os.path.join(wrkdir,jobfile))
-  print("  settings:",val)
+  print("  logfile:",logfile)
+  print("  settings:",ns)
+  print("  task-per-node:",tpn)
+  print("  OMP_NUM_THREADS:",ompt)
 
   f=open(jobfile,'w')
   f.write(line)
   f.close()
 
-  #os.system('sbatch {}'.format(jobfile))
+  os.system('sbatch {}'.format(jobfile))
 
 
 def main(argv) :
@@ -190,6 +203,9 @@ def main(argv) :
       os.makedirs(vhrdir)
 
   for tag,val in settings.items():
+    if 'active' in val:
+        if not val['active']:
+            continue
     os.chdir(vhrdir)
     wrkdir=os.path.join(vhrdir,'test_{}'.format(tag))
     if not os.path.exists(wrkdir):
@@ -198,10 +214,11 @@ def main(argv) :
     os.chdir(wrkdir)
     setup_files(indir,files,links)
 
-    modif = update_namelist(namelist,update_settings(val))
+    new_settings = update_settings(val)
+    modif = update_namelist(namelist,new_settings)
     write_namelist('fort.4',modif)
 
-    create_job(wrkdir,tag,val,binary,environment)
+    create_job(wrkdir,tag,new_settings,val,binary,environment)
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv))

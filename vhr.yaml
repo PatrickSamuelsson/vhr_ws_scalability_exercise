@@ -3,22 +3,31 @@ binary: '/scratch/snh/hm_home/prep_host/bin/MASTERODB'
 use_environment : "gnu"
 
 settings:
+    default: 
+       active : True
+       NPROC: -1
+       NPROCX: -1
+       NPROCY: -1
+       NSTRIN: -1
+       NPROC_IO: -1
+       OMP_NUM_THREADS: 1
+       TASKS-PER-NODE: 128
+
     run1: 
+       active : False
        NPROC: 128
        NPROCX: 16
        NPROCY: 16
        NPROC_IO: 0
        NSTRIN: 1
-       OMP_NUM_THREADS : 1
-       #TASKS-PER-NODE: 128
        
     run2: 
-       NPROC: 256
+       active : False
+       NPROC: 512
        NPROCX: 16
        NPROCY: 32
        NPROC_IO: 0
        NSTRIN: 1
-       OMP_NUM_THREADS : 1
 
 environment:
  gnu: | 
@@ -28,5 +37,11 @@ environment:
    module load netcdf4/4.7.4
    module load hdf5/1.10.6
    module load ecmwf-toolbox/2021.08.3.0
-   module load gdal/3.2.1
 
+ intel: | 
+   module load prgenv/intel
+   module load intel-mkl/19.0.5
+   module load openmpi/4.1.1.1
+   module load netcdf4/4.7.4
+   module load hdf5/1.10.6
+   module load ecmwf-toolbox/2021.08.3.0
