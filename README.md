@@ -69,7 +69,7 @@ environment:
 To start your runs simply 
 
 ```
-./vhr_scal.py -c your_conig.yaml
+./vhr_scal.py -c your_config.yaml
 ```
 
 which will submit jobs for the active runs you've defined. The result will end up under the specified vhrdir.
