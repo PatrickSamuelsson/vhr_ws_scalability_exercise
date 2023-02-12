@@ -1,0 +1,160 @@
+vhrdir: '/scratch/snh/vhr_thomas'
+indir: '/scratch/snh/test_exp/work/20200801/fc/'
+binary: '/home/snh/test/day_container/src/../rootpack/cy43t2/43t2_bf.11.OMPIIFC2104.AA/bin/MASTERODB'
+use_environment : "intel"
+
+settings:
+    default: 
+       active : False
+       NPROC: -1
+       NPROCX: -1
+       NPROCY: -1
+       NSTRIN: -1
+       NPROC_IO: -1
+       OMP_NUM_THREADS: 1
+       TASKS-PER-NODE: 128
+
+    run_nstrin: 
+       active : False
+       NPROC: -1
+       NPROCX: -1
+       NPROCY: -1
+       NSTRIN: 256
+       NPROC_IO: -1
+       OMP_NUM_THREADS: 1
+       TASKS-PER-NODE: 128
+
+    run_ioserv: 
+       active : False
+       NPROC: 240
+       NPROCX: 15
+       NPROCY: 16
+       NSTRIN: 240
+       NPROC_IO: 16
+       OMP_NUM_THREADS: 1
+       TASKS-PER-NODE: 128
+
+    ioserv_nstrin1: 
+       active : False
+       NPROC: 240
+       NPROCX: 15
+       NPROCY: 16
+       NSTRIN: 1
+       NPROC_IO: 16
+       OMP_NUM_THREADS: 1
+       TASKS-PER-NODE: 128
+
+    4nodes: 
+       active : False
+       NPROC: 496
+       NPROCX: 16
+       NPROCY: 31
+       NSTRIN: 1
+       NPROC_IO: 16
+       OMP_NUM_THREADS: 1
+       TASKS-PER-NODE: 128
+
+    4nodes_1D: 
+       active : False
+       NPROC: 496
+       NPROCX: 4
+       NPROCY: 124
+       NSTRIN: 1
+       NPROC_IO: 16
+       OMP_NUM_THREADS: 1
+       TASKS-PER-NODE: 128
+
+    8nodes: 
+       active : False
+       NPROC: 1008
+       NPROCX: 28
+       NPROCY: 36
+       NSTRIN: 1
+       NPROC_IO: 16
+       OMP_NUM_THREADS: 1
+       TASKS-PER-NODE: 128
+
+    16nodes: 
+       active : True
+       NPROC: 2024
+       NPROCX: 44
+       NPROCY: 46
+       NSTRIN: 2024
+       NPROC_IO: 16
+       OMP_NUM_THREADS: 1
+       TASKS-PER-NODE: 128
+
+
+    20nodes: 
+       active : False
+       NPROC: 2544
+       NPROCX: 48
+       NPROCY: 53
+       NSTRIN: 2544
+       NPROC_IO: 16
+       OMP_NUM_THREADS: 1
+       TASKS-PER-NODE: 128
+
+# nodes, nprocx, nprocy, nproc_io
+ # 20, 48,53,16
+ # 17, 48,45,16
+ # 16, 44,46,24
+ # 14, 37,48,16
+ # 12, 38,40,16
+ # 11, 34,41,14
+ # 10, 35,36,20
+ #  9, 27,42,18
+ #  8, 28,36,16
+ #  7, 22,40,16
+ #  6, 16,47,16
+ #  6, 25,30,18
+ #  5, 24,26,16
+ #  4, 16,31,16
+ #  3, 16,23,16
+ #  2, 16,15,16
+ #  1, 16, 7,16
+
+
+environment:
+ gnu: | 
+   module load prgenv/gnu
+   module load openmpi/4.1.1.1
+   module load openblas/0.3.9
+   module load netcdf4/4.7.4
+   module load hdf5/1.10.6
+   module load ecmwf-toolbox/2021.08.3.0
+
+ intel: | 
+   module purge
+   module load prgenv/intel
+   module load intel/2021.4.0
+   module load intel-mkl/19.0.5
+   module load hpcx-openmpi/2.9.0
+   module load ecmwf-toolbox/2022.03.0.1
+   module load hdf5/1.10.6
+   module load netcdf4/4.7.4
+   export LD_LIBRARY_PATH=${ECCODES_DIR}/lib:${NETCDF4_DIR}/lib:${LD_LIBRARY_PATH}
+   export OMP_PLACES=cores
+   export OMP_PROC_BIND=true
+   export OMP_STACKSIZE=4G
+   export KMP_STACKSIZE=4G
+   export KMP_MONITOR_STACKSIZE=4G
+   export MKL_CBWR="AUTO,STRICT"
+   export MKL_NUM_THREADS=1
+   export MKL_DEBUG_CPU_TYPE=5
+   export I_MPI_LIBRARY_KIND=release
+   export DR_HOOK=1
+   export DR_HOOK_IGNORE_SIGNALS=-1
+   export DR_HOOK_SILENT=1
+   export DR_HOOK_SHOW_PROCESS_OPTIONS=0
+   export DR_HOOK_OPT=prof
+   export MPL_MBX_SIZE=2048000000
+   export EC_PROFILE_HEAP=0
+   export MPIAUTOCONFIG=mpiauto.TIME.conf
+   export EC_PROFILE_MEM=0
+   export EC_MPI_ATEXIT=0
+   export EC_MEMINFO=0
+   export ZOPT="" # optimisation options when running.
+
+
+

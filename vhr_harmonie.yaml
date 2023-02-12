@@ -1,8 +1,10 @@
 indir: '/scratch/snh/hm_home/prep_host/20230207_21/forecast/'
+vhrdir: '/scratch/snh/vhr_METCOOP25D'
 binary: '/scratch/snh/hm_home/prep_host/bin/MASTERODB'
 use_environment : "gnu"
 
 settings:
+
     default: 
        active : False
        NPROC: -1
@@ -13,7 +15,7 @@ settings:
        OMP_NUM_THREADS: 1
        TASKS-PER-NODE: 128
 
-    run1: 
+    1node: 
        active : False
        NPROC: 128
        NPROCX: 16
@@ -21,7 +23,7 @@ settings:
        NPROC_IO: 0
        NSTRIN: 1
        
-    run2: 
+    2nodes_nstrin1: 
        active : False
        NPROC: 512
        NPROCX: 16
@@ -29,13 +31,65 @@ settings:
        NPROC_IO: 0
        NSTRIN: 1
 
-    run3: 
-       active : True
+    2nodes: 
+       active : False
        NPROC: 512
        NPROCX: 16
        NPROCY: 32
        NPROC_IO: 0
        NSTRIN: 512
+
+    2nodes_ioserv: 
+       active : False
+       NPROC: 512
+       NPROCX: 16
+       NPROCY: 31
+       NPROC_IO: 16
+       NSTRIN: 512
+
+    8nodes_ioserv: 
+       active : True
+       NPROC: 1008
+       NPROCX: 28
+       NPROCY: 36
+       NPROC_IO: 16
+       NSTRIN: 1008
+
+    12nodes_ioserv: 
+       active : True
+       NPROC: 1520
+       NPROCX: 38
+       NPROCY: 40
+       NPROC_IO: 16
+       NSTRIN: 1520
+
+    20nodes_ioserv: 
+       active : False
+       NPROC: 2544
+       NPROCX: 48
+       NPROCY: 53
+       NPROC_IO: 16
+       NSTRIN: 2544
+
+# Example choices for 
+# nodes, nprocx, nprocy, nproc_io
+ # 20, 48,53,16
+ # 17, 48,45,16
+ # 16, 44,46,24
+ # 14, 37,48,16
+ # 12, 38,40,16
+ # 11, 34,41,14
+ # 10, 35,36,20
+ #  9, 27,42,18
+ #  8, 28,36,16
+ #  7, 22,40,16
+ #  6, 16,47,16
+ #  6, 25,30,18
+ #  5, 24,26,16
+ #  4, 16,31,16
+ #  3, 16,23,16
+ #  2, 16,15,16
+ #  1, 16, 7,16
 
 environment:
  gnu: | 

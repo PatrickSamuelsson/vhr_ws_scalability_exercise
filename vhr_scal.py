@@ -8,7 +8,17 @@ import yaml
 import argparse
 
 
+#####################################################################################3
+def set_verbosity(a) :
+  p = 1
+  if a.v != None :
+   p += len(a.v)
 
+  if a.s != None :
+   p -= len(a.s)
+  return p
+
+#####################################################################################3
 def find_files(path,check_file=True):
   result = []
   with os.scandir(path) as it:
@@ -117,7 +127,7 @@ def setup_files(indir,files,links):
         shutil.copy(os.path.join(indir,fname),'.')
 
 
-def create_job(wrkdir,i,ns,val,binary,environment):
+def create_job(wrkdir,i,ns,val,binary,environment,dry):
 
   jobfile = 'test.job'
 
@@ -148,6 +158,7 @@ srun {4}
 
 '''.format(logfile,i,nodes,tpn,binary,wrkdir,environment,ompt)
 
+  print()
   print("Creating job as",os.path.join(wrkdir,jobfile))
   print("  logfile:",logfile)
   print("  settings:",ns)
@@ -158,19 +169,29 @@ srun {4}
   f.write(line)
   f.close()
 
-  os.system('sbatch {}'.format(jobfile))
+  if dry :
+      print("Dry run, job not submitted")
+  else:
+      os.system('sbatch {}'.format(jobfile))
 
 
 def main(argv) :
 
   parser = argparse.ArgumentParser(description='Wrapper for VHR scalability exercise')
   parser.add_argument('-c',dest="config_file",help='Config file',required=True,default='vhr.yaml')
+  parser.add_argument('-v', action='append_const', const=int, help='Increase verbosity')
+  parser.add_argument('-s', action='append_const', const=int, help='Decrease verbosity')
+  parser.add_argument('-d',action="store_true",dest="dry",
+                      help="Dry run, do all preparations without submitting the job",required=False,default=False)
+
 
   if len(argv) == 1 :
      parser.print_help()
      sys.exit(1)
 
   args = parser.parse_args()
+  printlev = set_verbosity(args)
+
 
   # Read config file
   if not os.path.isfile(args.config_file) :
@@ -192,6 +213,11 @@ def main(argv) :
 
   files = [x for x in files if not skipme(x)]
   links = [x for x in links if not skipme(x)]
+  if printlev > 1:
+      print('\nCopying:')
+      [print('   ',f) for f in sorted(files)]
+      print('\nLinking:')
+      [print('   ',l) for l in sorted(links)]
 
   settings = config['settings']
 
@@ -205,7 +231,7 @@ def main(argv) :
         if not val['active']:
             continue
     os.chdir(config['vhrdir'])
-    wrkdir=os.path.join(config['vhrdir'],'test_{}'.format(tag))
+    wrkdir=os.path.join(config['vhrdir'],'{}'.format(tag))
     if not os.path.exists(wrkdir):
         os.makedirs(wrkdir)
 
@@ -216,7 +242,7 @@ def main(argv) :
     modif = update_namelist(namelist,new_settings)
     write_namelist('fort.4',modif)
 
-    create_job(wrkdir,tag,new_settings,val,binary,environment)
+    create_job(wrkdir,tag,new_settings,val,binary,environment,args.dry)
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv))
