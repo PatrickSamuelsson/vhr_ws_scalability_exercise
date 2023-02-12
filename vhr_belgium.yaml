@@ -1,3 +1,6 @@
+# 
+# Change to your directories and binary before use
+# 
 vhrdir: '/scratch/snh/vhr_thomas'
 indir: '/scratch/snh/test_exp/work/20200801/fc/'
 binary: '/home/snh/test/day_container/src/../rootpack/cy43t2/43t2_bf.11.OMPIIFC2104.AA/bin/MASTERODB'
@@ -14,7 +17,7 @@ settings:
        OMP_NUM_THREADS: 1
        TASKS-PER-NODE: 128
 
-    run_nstrin: 
+    2nodes_nstrin: 
        active : False
        NPROC: -1
        NPROCX: -1
@@ -24,7 +27,7 @@ settings:
        OMP_NUM_THREADS: 1
        TASKS-PER-NODE: 128
 
-    run_ioserv: 
+    2nodes_ioserv: 
        active : False
        NPROC: 240
        NPROCX: 15
@@ -54,17 +57,27 @@ settings:
        OMP_NUM_THREADS: 1
        TASKS-PER-NODE: 128
 
-    4nodes_1D: 
+    8nodes: 
        active : False
-       NPROC: 496
-       NPROCX: 4
-       NPROCY: 124
+       NPROC: 1024
+       NPROCX: 32
+       NPROCY: 32
        NSTRIN: 1
-       NPROC_IO: 16
+       NPROC_IO: 0
        OMP_NUM_THREADS: 1
        TASKS-PER-NODE: 128
 
-    8nodes: 
+    8nodes_nstrin: 
+       active : False
+       NPROC: 1024
+       NPROCX: 32
+       NPROCY: 32
+       NSTRIN: 1024
+       NPROC_IO: 0
+       OMP_NUM_THREADS: 1
+       TASKS-PER-NODE: 128
+
+    8nodes_ioserv: 
        active : False
        NPROC: 1008
        NPROCX: 28
@@ -74,24 +87,14 @@ settings:
        OMP_NUM_THREADS: 1
        TASKS-PER-NODE: 128
 
-    16nodes: 
-       active : True
-       NPROC: 2024
-       NPROCX: 44
-       NPROCY: 46
-       NSTRIN: 2024
-       NPROC_IO: 16
-       OMP_NUM_THREADS: 1
-       TASKS-PER-NODE: 128
-
-
     20nodes: 
-       active : False
-       NPROC: 2544
-       NPROCX: 48
-       NPROCY: 53
-       NSTRIN: 2544
-       NPROC_IO: 16
+       active : True
+       NPROC: 2560
+       NPROCX: -1
+       NPROCY: -1
+       NSTRIN: -1
+       NPROC_IO: -1
+       NSTRIN: -1
        OMP_NUM_THREADS: 1
        TASKS-PER-NODE: 128
 

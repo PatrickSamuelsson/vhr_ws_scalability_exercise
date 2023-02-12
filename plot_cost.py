@@ -38,7 +38,7 @@ def scan_log(filename):
 
 ############################################################################33
 
-def plot_log(scans):
+def plot_log(scans,outfile):
 
  print('plotting ...')
  size = 13
@@ -57,7 +57,7 @@ def plot_log(scans):
       xx.append(x[i])
       yy.append(y[i])
 
-  size -= 1
+  #size -= 1
   ax.plot(xx,yy,'*',label=exp,markersize=size)
 
  ax.legend()
@@ -65,7 +65,12 @@ def plot_log(scans):
  ax.set(xlabel='Nodes')
  fig.suptitle('Cost for DOMAIN:({}x{}x{})'.format(v['NDLON'],v['NDGUXG'],v['NFLEVG']))
 
- plt.show()
+ if outfile is None:
+   plt.show()
+ else:
+   print("Save plot to",outfile)
+   plt.savefig(outfile.replace('.png',''))
+
 
 ############################################################################33
 
@@ -89,8 +94,10 @@ def scan_logs(path):
 def main(argv) :
 
   parser = argparse.ArgumentParser(description='Plot cost as function of NODES')
-  parser.add_argument('-e',dest="experiments",help='List of experiments as exp1:exp2:...:expN',required=True,default=None)
-  parser.add_argument('-i',dest="vhrdir",help='List of experiments',required=False,default=os.path.join(os.environ['SCRATCH'],'vhr_exercise'))
+  parser.add_argument('-e',dest="experiments",help='List of experiments as exp1:exp2:...:expN',required=False,default=None)
+  parser.add_argument('-i',dest="vhrdir",help='Experiment directory',required=False,default=os.path.join(os.environ['SCRATCH'],'vhr_exercise'))
+  parser.add_argument('-l',action="store_true",dest="list_exp",help='List experiments',required=False,default=False)
+  parser.add_argument('-p',dest="outfile",help='Stor plot to filename given',required=False,default=None)
 
   if len(argv) == 1 :
      parser.print_help()
@@ -98,15 +105,22 @@ def main(argv) :
 
   args = parser.parse_args()
 
+  if args.list_exp:
+      print("Content in",args.vhrdir)
+      dirs = ':'.join(os.listdir(args.vhrdir))
+      print('  ',dirs)
+      #os.system('ls -1 {}'.format(args.vhrdir))
+      sys.exit()
 
-  d = {}
-  for exp in args.experiments.split(':'):
+  if args.experiments is not None:
+   d = {}
+   for exp in args.experiments.split(':'):
     path = os.path.join(args.vhrdir,exp)
     print("-------- Scan",exp,"under",path)
     d[exp]=scan_logs(path)
     print(d[exp])
 
-  plot_log(d)
+   plot_log(d,args.outfile)
 
 
 if __name__ == "__main__":

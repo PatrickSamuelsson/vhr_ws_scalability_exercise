@@ -24,31 +24,31 @@ settings:
        NSTRIN: 1
        
     2nodes_nstrin1: 
-       active : False
-       NPROC: 512
+       active : True
+       NPROC: 256
        NPROCX: 16
-       NPROCY: 32
+       NPROCY: 16
        NPROC_IO: 0
        NSTRIN: 1
 
     2nodes: 
-       active : False
-       NPROC: 512
+       active : True
+       NPROC: 256
        NPROCX: 16
-       NPROCY: 32
+       NPROCY: 16
        NPROC_IO: 0
-       NSTRIN: 512
+       NSTRIN: 256
 
     2nodes_ioserv: 
-       active : False
-       NPROC: 512
-       NPROCX: 16
-       NPROCY: 31
+       active : True
+       NPROC: 256
+       NPROCX: 15
+       NPROCY: 16
        NPROC_IO: 16
-       NSTRIN: 512
+       NSTRIN: 256
 
     8nodes_ioserv: 
-       active : True
+       active : False
        NPROC: 1008
        NPROCX: 28
        NPROCY: 36
@@ -56,7 +56,7 @@ settings:
        NSTRIN: 1008
 
     12nodes_ioserv: 
-       active : True
+       active : False
        NPROC: 1520
        NPROCX: 38
        NPROCY: 40
