@@ -104,23 +104,24 @@ def main(argv) :
      sys.exit(1)
 
   args = parser.parse_args()
+  dirs = ':'.join(os.listdir(args.vhrdir))
 
   if args.list_exp:
       print("Content in",args.vhrdir)
-      dirs = ':'.join(os.listdir(args.vhrdir))
       print('  ',dirs)
-      #os.system('ls -1 {}'.format(args.vhrdir))
       sys.exit()
 
-  if args.experiments is not None:
-   d = {}
-   for exp in args.experiments.split(':'):
+  if args.experiments is None:
+      args.experiments=dirs
+
+  d = {}
+  for exp in args.experiments.split(':'):
     path = os.path.join(args.vhrdir,exp)
     print("-------- Scan",exp,"under",path)
     d[exp]=scan_logs(path)
     print(d[exp])
 
-   plot_log(d,args.outfile)
+  plot_log(d,args.outfile)
 
 
 if __name__ == "__main__":
