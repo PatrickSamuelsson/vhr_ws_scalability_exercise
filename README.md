@@ -72,7 +72,20 @@ To start your runs simply
 ./vhr_scal.py -c your_config.yaml
 ```
 
-which will submit jobs for the active runs you've defined. The result will end up under the specified vhrdir.
+which will submit jobs for the active runs you've defined. The result will end up under the specified vhrdir. The script takes the following arguments:
+
+```
+usage: vhr_scal.py [-h] -c CONFIG_FILE [-v] [-s] [-d]
+
+Wrapper for VHR scalability exercise
+
+optional arguments:
+  -h, --help      show this help message and exit
+  -c CONFIG_FILE  Config file
+  -v              Increase verbosity
+  -s              Decrease verbosity
+  -d              Dry run, do all preparations without submitting the job
+```
 
 ## Plotting the result
 
