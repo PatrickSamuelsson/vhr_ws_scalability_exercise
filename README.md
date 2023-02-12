@@ -106,4 +106,4 @@ optional arguments:
   -p OUTFILE      Stor plot to filename given
 
 ```
-
+![](https://github.com/uandrae/vhr_ws_scalability_exercise/blob/main/example.png)
