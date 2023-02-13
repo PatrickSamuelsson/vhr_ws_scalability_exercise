@@ -1,4 +1,4 @@
-# A simple forecast run rerunner for scalability tests
+# A simple forecast rerunner for scalability tests
 
 The following tool can be used to run a number of runs varying the number of processors in a simple way. It relies on an existing working directory from a forecast model run. The tool has been tested with both available examples for the VHR exercises.
 
@@ -12,12 +12,16 @@ Make sure you have python3 loaded by
 
 ## Configuration options
 
+### Global settings
+
 A yaml file is used to configure the settings for the runs. First a few general settings are done:
 
 - `vhrdir` - defines the working directory for your runs
 - `indir` - defines the reference directory from a run with the forecast model
 - `binary` - full path and name of the binary to be used
 - `use_environment` - environment setings suitable for the run, content defined further down
+
+### Settings per run
 
 Now we can proceed and define number of runs to be done. The first one uses the default settings from your reference namelist:
 
@@ -49,6 +53,23 @@ where `active` tells if the run should be executed or not. We can specify some m
        TASKS-PER-NODE: 128
 ```
 Here we have defined both the number of nodes, the 2D decomposition and activated the IO-server. More configuration examples can be found in the to yaml files in this repo.
+
+### Specify arbitrary namelist
+
+The upper air namelist used for each run can be specified in three ways
+
+- The default is to use the fort.4 file available in `vhrdir`
+- Specify `ref_ua_namelist` on top level to override the default, i.e `/some_path/fort.4`
+- Speficy `ref_ua_namelist` for a single run to use this namelist for this specific run, i.e
+
+```
+settings:
+    myrun:
+     ref_ua_namelist: '/some_other_path/fort.4
+     ...
+```
+
+### The runtime environment
 
 Finally we define which modules to load and environment variables to specify for the binary used
 
