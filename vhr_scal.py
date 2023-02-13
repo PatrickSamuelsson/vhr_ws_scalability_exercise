@@ -38,6 +38,7 @@ def find_files(path,check_file=True):
 
 def read_namelist(filename):
   list = []
+  print('Read namelist:',filename)
   with open(filename, "r") as a_file:
    for line in a_file:
     list.append(line)
@@ -221,7 +222,6 @@ def main(argv) :
 
   settings = config['settings']
 
-  namelist = read_namelist(os.path.join(indir,'fort.4'))
 
   if not os.path.exists(config['vhrdir']):
       os.makedirs(config['vhrdir'])
@@ -239,6 +239,17 @@ def main(argv) :
     setup_files(indir,files,links)
 
     new_settings = update_settings(val)
+    namelistfile = None
+    if 'ref_ua_namelist' in val:
+        if val['ref_ua_namelist'] is not None:
+          namelistfile= val['ref_ua_namelist']
+    if 'ref_ua_namelist' in config and namelistfile is None:
+        if config['ref_ua_namelist'] is not None:
+           namelistfile= config['ref_ua_namelist']
+    if namelistfile is None:
+        namelistfile= os.path.join(indir,'fort.4')
+
+    namelist = read_namelist(namelistfile)
     modif = update_namelist(namelist,new_settings)
     write_namelist('fort.4',modif)
 

@@ -1,12 +1,14 @@
 indir: '/scratch/snh/hm_home/prep_host/20230207_21/forecast/'
 vhrdir: '/scratch/snh/vhr_METCOOP25D'
 binary: '/scratch/snh/hm_home/prep_host/bin/MASTERODB'
+ref_ua_namelist: #'/home/snh/vhr_scal_exc/fort.4'
 use_environment : "gnu"
 
 settings:
 
     default: 
-       active : False
+       active : True
+       ref_ua_namelist: #'/home/snh/fort.4'
        NPROC: -1
        NPROCX: -1
        NPROCY: -1
@@ -24,7 +26,7 @@ settings:
        NSTRIN: 1
        
     2nodes_nstrin1: 
-       active : True
+       active : False
        NPROC: 256
        NPROCX: 16
        NPROCY: 16
@@ -32,7 +34,7 @@ settings:
        NSTRIN: 1
 
     2nodes: 
-       active : True
+       active : False
        NPROC: 256
        NPROCX: 16
        NPROCY: 16
@@ -40,7 +42,7 @@ settings:
        NSTRIN: 256
 
     2nodes_ioserv: 
-       active : True
+       active : False
        NPROC: 256
        NPROCX: 15
        NPROCY: 16
