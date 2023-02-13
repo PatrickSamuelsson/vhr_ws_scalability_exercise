@@ -21,6 +21,16 @@ A yaml file is used to configure the settings for the runs. First a few general 
 - `binary` - full path and name of the binary to be used
 - `use_environment` - environment setings suitable for the run, content defined further down
 
+The keys recognized are defined in rules. New keys can be defined according to needs
+```
+rules:
+  NAMDIM : ['NPROMA']
+  NAMPAR0 : ['NPROC']
+  NAMPAR1 : ['NPRGPEW','NPRTRV',
+             'NPRGPNS','NPRTRW','NSTRIN']
+  NAMIO_SERV: ['NPROC_IO']
+```
+
 ### Settings per run
 
 Now we can proceed and define number of runs to be done. The first one uses the default settings from your reference namelist:
@@ -40,7 +50,7 @@ settings:
 
 ```
 
-where `active` tells if the run should be executed or not. We can specify some more details for like in the following:
+where `active` tells if the run should be executed or not and NPROCX and NPROCY are mapped to NPRGPEW/NPRTRV and NPRGPNS/NPRTRW respectively. We can specify some more details for like in the following:
 
 ```
     4nodes_ioserv: 

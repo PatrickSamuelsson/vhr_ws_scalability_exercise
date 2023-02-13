@@ -4,6 +4,13 @@ binary: '/scratch/snh/hm_home/prep_host/bin/MASTERODB'
 ref_ua_namelist: #'/home/snh/vhr_scal_exc/fort.4'
 use_environment : "gnu"
 
+rules:
+  NAMDIM : ['NPROMA']
+  NAMPAR0 : ['NPROC']
+  NAMPAR1 : ['NPRGPEW','NPRTRV',
+             'NPRGPNS','NPRTRW','NSTRIN']
+  NAMIO_SERV: ['NPROC_IO']
+
 settings:
 
     default: 

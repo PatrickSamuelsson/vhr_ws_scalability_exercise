@@ -6,6 +6,13 @@ indir: '/scratch/snh/test_exp/work/20200801/fc/'
 binary: '/home/snh/test/day_container/src/../rootpack/cy43t2/43t2_bf.11.OMPIIFC2104.AA/bin/MASTERODB'
 use_environment : "intel"
 
+rules:
+  NAMDIM : ['NPROMA']
+  NAMPAR0 : ['NPROC']
+  NAMPAR1 : ['NPRGPEW','NPRTRV',
+             'NPRGPNS','NPRTRW','NSTRIN']
+  NAMIO_SERV: ['NPROC_IO']
+
 settings:
     default: 
        active : False

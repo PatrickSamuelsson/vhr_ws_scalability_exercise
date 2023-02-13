@@ -63,7 +63,7 @@ def update_namelist(list,new_settings):
     if '&' in l:
       if nfld != nchg:
         for k,v in new_settings[key].items():
-         if k not in done and v > -1:
+         if k not in done and v is not None:
           update.insert(-2,'  {}={},\n'.format(k,v))
         done=[]
         nfld=0
@@ -85,34 +85,28 @@ def update_namelist(list,new_settings):
           n[1]=str(v)+',\n'
           update[-1] = '='.join(n)
         else:
-          new_settings[key][k]=int(n[1].replace(',','').strip())
+          new_settings[key][k]=n[1].replace(',','').strip()
 
   return update
 
-def update_settings(s):
+def update_settings(rules,s):
 
- new_settings= { 'NAMDIM' : {},
-                 'NAMPAR0' : {},
-                 'NAMPAR1' : {},
-                 'NAMIO_SERV': {} }
+ new_settings= { x : {} for x in rules }
 
- if 'NPROMA' in s :
-     new_settings['NAMDIM']['NPROMA'] = s['NPROMA']
- if 'NPROC' in s :
-     new_settings['NAMPAR0']['NPROC'] = s['NPROC']
-
- if 'NPROCX' in s and 'NPROCY' in s:
-     new_settings['NAMPAR0']['NPRGPEW']= s['NPROCX']
-     new_settings['NAMPAR0']['NPRTRV']= s['NPROCX']
-     new_settings['NAMPAR0']['NPRGPNS']= s['NPROCY']
-     new_settings['NAMPAR0']['NPRTRW']= s['NPROCY']
-               
- if 'NPROC_IO' in s :
-     new_settings['NAMIO_SERV']['NPROC_IO']= s['NPROC_IO']
-
- if 'NSTRIN' in s :
-     new_settings['NAMPAR1']['NSTRIN'] = s['NSTRIN']
-     new_settings['NAMPAR1']['NSTROUT'] = s['NSTRIN']
+ for namelist,values in rules.items():
+     for key in values:
+       if key in s:
+         new_settings[namelist][key]=s[key]
+ 
+ # Special case for NPROCX & NPROCY
+ if 'NPROCX' in s:
+     if s['NPROCX'] is not None:
+         new_settings['NAMPAR0']['NPRGPEW']=s['NPROCX']
+         new_settings['NAMPAR0']['NPRTRV']=s['NPROCX']
+ if 'NPROCY' in s:
+     if s['NPROCY'] is not None:
+         new_settings['NAMPAR0']['NPRGPNS']=s['NPROCY']
+         new_settings['NAMPAR0']['NPRTRW']=s['NPROCY']
 
  return new_settings
 
@@ -135,9 +129,12 @@ def create_job(wrkdir,i,ns,val,binary,environment,dry):
 
   jobfile = 'test.job'
 
+  print(ns)
   logfile = os.path.join(wrkdir,'job.log')
   tpn=val['TASK-PER-NODE'] if 'TASK-PER-NODE' in val else 128
-  nodes = int((ns['NAMPAR0']['NPROC']+max(0,ns['NAMIO_SERV']['NPROC_IO']))/tpn)
+  nproc =int(ns['NAMPAR0']['NPROC'])
+  nproc_io =int(ns['NAMIO_SERV']['NPROC_IO'])
+  nodes = int((nproc+max(0,nproc_io))/tpn)
   ompt = 'export OMP_NUM_THREADS={}'.format(val['OMP_NUM_THREADS']) if 'OMP_NUM_THREADS' in val else 1
 
 
@@ -224,6 +221,7 @@ def main(argv) :
       [print('   ',l) for l in sorted(links)]
 
   settings = config['settings']
+  rules = config['rules']
 
 
   if not os.path.exists(config['vhrdir']):
@@ -241,7 +239,7 @@ def main(argv) :
     os.chdir(wrkdir)
     setup_files(indir,files,links)
 
-    new_settings = update_settings(val)
+    new_settings = update_settings(rules,val)
     namelistfile = None
     if 'ref_ua_namelist' in val:
         if val['ref_ua_namelist'] is not None:
