@@ -1,4 +1,4 @@
-# A simple forecast run rerunner for scalability tests
+# A simple forecast rerunner for scalability tests
 
 The following tool can be used to run a number of runs varying the number of processors in a simple way. It relies on an existing working directory from a forecast model run. The tool has been tested with both available examples for the VHR exercises.
 
