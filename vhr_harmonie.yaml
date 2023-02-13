@@ -7,7 +7,7 @@ use_environment : "gnu"
 settings:
 
     default: 
-       active : True
+       active : False
        ref_ua_namelist: #'/home/snh/fort.4'
        NPROC: -1
        NPROCX: -1
@@ -42,12 +42,12 @@ settings:
        NSTRIN: 256
 
     2nodes_ioserv: 
-       active : False
-       NPROC: 256
+       active : True
+       NPROC: 240
        NPROCX: 15
        NPROCY: 16
        NPROC_IO: 16
-       NSTRIN: 256
+       NSTRIN: 240
 
     8nodes_ioserv: 
        active : False
@@ -101,6 +101,7 @@ environment:
    module load netcdf4/4.7.4
    module load hdf5/1.10.6
    module load ecmwf-toolbox/2021.08.3.0
+   export RTTOV_COEFDIR=/scratch/snh/satellite/rtcoef_rttov12/harm_coef
 
  intel: | 
    module load prgenv/intel
@@ -109,6 +110,7 @@ environment:
    module load netcdf4/4.7.4
    module load hdf5/1.10.6
    module load ecmwf-toolbox/2021.08.3.0
+   export RTTOV_COEFDIR=/scratch/snh/satellite/rtcoef_rttov12/harm_coef
 
  intel_belgium: | 
    module purge
