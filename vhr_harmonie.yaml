@@ -9,11 +9,12 @@ settings:
     default: 
        active : False
        ref_ua_namelist: #'/home/snh/fort.4'
-       NPROC: -1
-       NPROCX: -1
-       NPROCY: -1
-       NSTRIN: -1
-       NPROC_IO: -1
+       NPROMA:
+       NPROC: 
+       NPROCX:
+       NPROCY:
+       NSTRIN:
+       NPROC_IO: 
        OMP_NUM_THREADS: 1
        TASKS-PER-NODE: 128
 
@@ -42,7 +43,7 @@ settings:
        NSTRIN: 256
 
     2nodes_ioserv: 
-       active : True
+       active : False
        NPROC: 240
        NPROCX: 15
        NPROCY: 16

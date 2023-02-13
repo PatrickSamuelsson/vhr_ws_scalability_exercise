@@ -81,7 +81,7 @@ def update_namelist(list,new_settings):
       if k in l:
         done.append(k)
         n= l.split('=')
-        if v > -1:
+        if v is not None :
           n[1]=str(v)+',\n'
           update[-1] = '='.join(n)
         else:
@@ -91,10 +91,13 @@ def update_namelist(list,new_settings):
 
 def update_settings(s):
 
- new_settings= { 'NAMPAR0' : {},
+ new_settings= { 'NAMDIM' : {},
+                 'NAMPAR0' : {},
                  'NAMPAR1' : {},
                  'NAMIO_SERV': {} }
 
+ if 'NPROMA' in s :
+     new_settings['NAMDIM']['NPROMA'] = s['NPROMA']
  if 'NPROC' in s :
      new_settings['NAMPAR0']['NPROC'] = s['NPROC']
 

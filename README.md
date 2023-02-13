@@ -29,11 +29,12 @@ Now we can proceed and define number of runs to be done. The first one uses the 
 settings:
     default: 
        active : True
-       NPROC: -1
-       NPROCX: -1
-       NPROCY: -1
-       NSTRIN: -1
-       NPROC_IO: -1
+       NPROMA:
+       NPROC:
+       NPROCX:
+       NPROCY:
+       NSTRIN:
+       NPROC_IO:
        OMP_NUM_THREADS: 1
        TASKS-PER-NODE: 128
 

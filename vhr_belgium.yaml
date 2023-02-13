@@ -9,21 +9,22 @@ use_environment : "intel"
 settings:
     default: 
        active : False
-       NPROC: -1
-       NPROCX: -1
-       NPROCY: -1
-       NSTRIN: -1
-       NPROC_IO: -1
+       NPROMA: 
+       NPROC: 
+       NPROCX:
+       NPROCY:
+       NSTRIN:
+       NPROC_IO:
        OMP_NUM_THREADS: 1
        TASKS-PER-NODE: 128
 
     2nodes_nstrin: 
        active : False
-       NPROC: -1
-       NPROCX: -1
-       NPROCY: -1
+       NPROC: 256
+       NPROCX: 
+       NPROCY: 
        NSTRIN: 256
-       NPROC_IO: -1
+       NPROC_IO:
        OMP_NUM_THREADS: 1
        TASKS-PER-NODE: 128
 
@@ -90,11 +91,11 @@ settings:
     20nodes: 
        active : True
        NPROC: 2560
-       NPROCX: -1
-       NPROCY: -1
-       NSTRIN: -1
-       NPROC_IO: -1
-       NSTRIN: -1
+       NPROCX: 
+       NPROCY: 
+       NSTRIN: 
+       NPROC_IO:
+       NSTRIN: 
        OMP_NUM_THREADS: 1
        TASKS-PER-NODE: 128
 
