@@ -2,7 +2,7 @@
 
 The following tool can be used to run a number of runs varying the number of processors in a simple way. It relies on an existing working directory from a forecast model run. The tool has been tested with both available examples for the VHR exercises.
 
-If you need any help please feel free to conatct the author.
+If you need any help please feel free to contact the author.
 
 ## Environment
 
