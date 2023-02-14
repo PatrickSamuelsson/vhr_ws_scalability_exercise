@@ -91,7 +91,7 @@ The upper air namelist used for each run can be specified in three ways
 ```
 settings:
     myrun:
-     ref_ua_namelist: '/some_other_path/fort.4
+     ref_ua_namelist: '/some_other_path/fort.4'
      ...
 ```
 
