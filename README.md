@@ -63,9 +63,20 @@ where `active` tells if the run should be executed or not and NPROCX and NPROCY 
        OMP_NUM_THREADS: 1
        TASKS-PER-NODE: 128
 ```
-Here we have defined both the number of nodes, the 2D decomposition and activated the IO-server. More configuration examples can be found in the to yaml files in this repo.
+Here we have defined both the number of nodes, the 2D decomposition and activated the IO-server. More configuration examples can be found in the to yaml files in this repo. The creative user can add own namelist variables to change, e.g. for dynamics. A possible dynamics orienented test could look like:
 
-### Specify arbitrary namelist
+```
+rules:
+  NAMDYNA : ['LSETTLS','LPC_FULL']
+
+settings:
+  great_fun_tests: 
+       LSETTLS : 'F'
+       LPC_FULL : 'T'
+```
+
+
+### Specifying an arbitrary namelist
 
 The upper air namelist used for each run can be specified in three ways
 
