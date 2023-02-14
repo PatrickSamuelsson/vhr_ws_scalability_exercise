@@ -78,9 +78,9 @@ def update_namelist(list,new_settings):
       continue
     if search:
      for k,v in new_settings[key].items():
-      if k in l:
+      n = l.split('=')
+      if re.match(k+'$',n[0].strip()):
         done.append(k)
-        n= l.split('=')
         if v is not None :
           n[1]=str(v)+',\n'
           update[-1] = '='.join(n)
