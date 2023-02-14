@@ -68,11 +68,15 @@ Here we have defined both the number of nodes, the 2D decomposition and activate
 ```
 rules:
   NAMDYNA : ['LSETTLS','LPC_FULL']
+  NAMPAR0 : ['NPROC']
+  NAMIO_SERV: ['NPROC_IO']
 
 settings:
   great_fun_tests: 
        LSETTLS : 'F'
        LPC_FULL : 'T'
+       NPROC:
+       NPROC_IO:
 ```
 
 
