@@ -1,8 +1,8 @@
-# A simple forecast rerunner for scalability tests
+# A simple forecast rerunner for scalability tests (and other fun stuff)
 
 The following tool can be used to run a number of runs varying the number of processors in a simple way. It relies on an existing working directory from a forecast model run. The tool has been tested with both available examples for the VHR exercises.
 
-If you need any help please feel free to conatct the author.
+If you need any help please feel free to contact the author.
 
 ## Environment
 
@@ -68,11 +68,15 @@ Here we have defined both the number of nodes, the 2D decomposition and activate
 ```
 rules:
   NAMDYNA : ['LSETTLS','LPC_FULL']
+  NAMPAR0 : ['NPROC']
+  NAMIO_SERV: ['NPROC_IO']
 
 settings:
   great_fun_tests: 
        LSETTLS : 'F'
        LPC_FULL : 'T'
+       NPROC:
+       NPROC_IO:
 ```
 
 
@@ -87,7 +91,7 @@ The upper air namelist used for each run can be specified in three ways
 ```
 settings:
     myrun:
-     ref_ua_namelist: '/some_other_path/fort.4
+     ref_ua_namelist: '/some_other_path/fort.4'
      ...
 ```
 
