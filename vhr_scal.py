@@ -133,7 +133,7 @@ def create_job(wrkdir,i,ns,val,binary,environment,dry):
   logfile = os.path.join(wrkdir,'job.log')
   tpn=val['TASK-PER-NODE'] if 'TASK-PER-NODE' in val else 128
   nproc =int(ns['NAMPAR0']['NPROC'])
-  nproc_io =int(ns['NAMIO_SERV']['NPROC_IO'])
+  nproc_io =int(ns['NAMIO_SERV']['NPROC_IO']) if  ns['NAMIO_SERV']['NPROC_IO'] is not None else 0
   nodes = int((nproc+max(0,nproc_io))/tpn)
   ompt = 'export OMP_NUM_THREADS={}'.format(val['OMP_NUM_THREADS']) if 'OMP_NUM_THREADS' in val else 1
 
